@@ -1,0 +1,33 @@
+.sortable-ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.tailwind-navigation-svg {
+    width: 20px;
+    height: 20px;
+}
+
+*,
+html * {
+    scrollbar-width: thin;
+    scrollbar-color: #18b5d0 #bacbce;
+}
+
+*::-webkit-scrollbar,
+html *::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track,
+html *::-webkit-scrollbar-track {
+    background: #bacbce;
+}
+
+*::-webkit-scrollbar-thumb,
+html *::-webkit-scrollbar-thumb {
+    background-color: #18b5d0;
+    border-radius: 5px;
+    border: 3px solid #bacbce;
+}

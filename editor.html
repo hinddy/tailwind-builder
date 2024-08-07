@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Current Page Editor</title>
+  <link rel="icon" href="./img/favicon.ico" />
+  <script src="./js/lib/tailwind.js"></script>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link href="./css/quill.min.css" rel="stylesheet" />
+  <style>
+    #preview .quill-editor {
+      display: none;
+    }
+
+    .ql-toolbar.ql-snow {
+      background: #f5eedb;
+      font-size: 0.9em;
+    }
+
+    .highlight-border {
+      outline: 3px dotted #0ea5e8;
+      /* Цвет подсветки можно изменить */
+      outline-offset: -3px;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
+
+  <div id="builder" class="flex h-[calc(100vh-64px)] overflow-hidden">
+    <div id="preview" class="flex-grow overflow-y-auto p-4 bg-white dark:bg-slate-900"></div>
+  </div>
+
+  <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-20">
+    <div id="editor-container" class="bg-white dark:bg-slate-900 p-4 rounded-lg w-full max-w-2xl">
+      <div>
+        <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-white">Edit Content</h3>
+        <div id="editor-area"
+          class="bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-b-[.5em] h-64 mb-4 code language-html"></div>
+        <div class="flex justify-end">
+          <button id="save-edit" class="px-3 py-1 bg-sky-500 text-white text-[.75em] rounded-[.5em]">Save</button>
+          <button id="cancel-edit"
+            class="ml-2 px-3 py-1 bg-slate-500 text-white text-[.75em] rounded-[.5em]">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!--script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script-->
+  <script defer src="./js/lib/quill.js"></script>
+  <script defer src="./js/default.js"></script>
+  <script defer src="./js/editor.js"></script>
+</body>
+
+</html>

@@ -19,66 +19,78 @@
     <div class="px-4">
       <div class="flex items-center justify-between h-14">
         <div class="flex items-center">
-          <img src="./img/tbuildy.svg" class="w-5 h-5 mr-1 mb-[2px]" />
-          <span class="font-semibold font-sans text-lg text-slate-800 dark:text-white">
-            <span class="text-[#0ea5e8]">Tailwind</span> Builder</span>
-              
-          <div class="flex absolute items-center ml-[16rem] space-x-4">
-            <label for="import-project"
-              class="inline-flex justify-center gap-x-1.5 rounded-[8px] bg-white dark:bg-slate-900 py-2 px-5 text-sm text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
-              title="Import Blocks">
-              Project
-              <i data-lucide="arrow-up" class="w-4 h-4 inline"></i>
-            </label>
-            <input type="file" id="import-project" accept=".json" class="hidden" />
-            <button id="createBlockBtn" class="block gap-x-1.5 rounded-[8px] px-5 py-2 text-sm text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700" title="Create New Block">
+          <img src="./img/tbuildy.svg" class="w-5 h-5 mr-1" />
+          <span class="font-semibold font-sans text-[#0ea5e8] leading-[1.25rem]">
+            Tailwind <span class="text-slate-800 dark:text-white">Build</span>Y
+          </span>
+
+          <div class="flex relative lg:absolute items-center lg:ml-[16rem] space-x-4">
+            <button id="createBlockBtn" class="hidden lg:inline-flex justify-center gap-x-1.5 rounded-[8px] bg-white dark:bg-slate-900 py-2 px-4 text-[.75em] text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer" title="Create New Block">
               New Block
-              <i data-lucide="plus" class="w-4 h-4 mb-1 inline"></i></button>
+              <i data-lucide="plus" class="w-4 h-4 inline"></i></button>
+            <button id="fullscreenEditor" class="hidden gap-x-1.5 rounded-[8px] px-1 lg:px-4 py-2 text-[.75em] text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700" title="Edit text content">Editor <i data-lucide="pencil" class="w-3 h-3 ms-1 inline"></i></button>
           </div>
         </div>
         <div class="flex items-center space-x-4">
           <button id="fullscreenButton"
-            class="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white" title="Full Screen">
+            class="hidden lg:block text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white" title="Full Screen">
             <i data-lucide="maximize" class="w-5 h-5"></i>
+          </button>
+          <button id="exportHtmlBtnMobile"
+            class="block lg:hidden text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white"
+            title="Export to HTML">
+            <i data-lucide="file-down" class="w-4 h-4 mb-1 inline"></i>
           </button>
           <button id="mode-toggle" class="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white"
             title="Dark Mode">
             <i data-lucide="sun" class="w-5 h-5"></i>
           </button>
-          <div class="relative inline-block text-left">
+          <div class="relative hidden lg:inline-block text-left">
             <div>
               <button id="tools-menu-button" type="button"
-                class="inline-flex w-full justify-center gap-x-1.5 rounded-[8px] bg-white dark:bg-slate-900 py-2 px-4 text-sm font-bold text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 hover:bg-slate-50"
+                class="inline-flex w-full justify-center gap-x-1.5 rounded-[8px] bg-white dark:bg-slate-900 py-2 px-4 text-[.75em] font-bold text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 hover:bg-slate-50"
                 title="Tools">
                 Tools
                 <i data-lucide="chevron-down" class="inline h-4 w-4 pt-1"></i>
               </button>
               <div id="tools-menu"
-                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 hidden">
+                class="origin-top-right absolute right-0 mt-2 w-48 text-[.75em] rounded-md shadow-lg py-1 bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 hidden">
+                <button id="openSceletonButton"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  title="Reset to Default Configuration">
+                  <i data-lucide="file-cog" class="w-4 h-4 inline"></i>
+                  Setting Page
+                </button>
                 <button id="config-btn"
-                  class="block w-full text-start px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
                   title="Theme Pattern">
                   <i data-lucide="pencil-ruler" class="w-4 h-4 mb-1 inline"></i>
                   Configuration
                 </button>
                 <button id="export-html-btn"
-                  class="block w-full text-start px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
                   title="Export to HTML">
                   <i data-lucide="file-down" class="w-4 h-4 mb-1 inline"></i>
                   Export to HTML
                 </button>
                 <label for="import-project"
-                  class="block w-full text-start px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
                   title="Import Blocks">
                   <i data-lucide="upload" class="w-4 h-4 mb-1 inline"></i>
                   Import Project
                 </label>
                 <input type="file" id="import-project" accept=".json" class="hidden" />
                 <button id="export-project-btn"
-                  class="block w-full text-start px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
                   title="Export to JSON">
                   <i data-lucide="download" class="w-4 h-4 mb-1 inline"></i>
                   Export Project
+                </button>
+                <button id="clearCurrentStateButton"
+                  class="block w-full text-start px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  title="Reset to Default Configuration">
+                  <i data-lucide="list-x" class="w-4 h-4 inline"></i>
+                  Reset Page
                 </button>
               </div>
             </div>
@@ -95,11 +107,18 @@
       </div>
       <button id="toggleSidebar"
         class="absolute top-1/2 -right-3 transform -translate-y-1/2 bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-200 rounded-[8px] p-[5px] focus:outline-none z-10">
-        <i data-lucide="chevrons-left" class="w-4 h-4"></i>
+        <i data-lucide="chevrons-left" class="relative left-2 sm:left-0 w-6 h-6 sm:w-4 sm:h-4"></i>
       </button>
+      <div class="sticky -bottom-1 w-full z-20">
+        <div class="flex items-center justify-center bg-slate-100 dark:bg-slate-900 border-t border-slate-300 dark:border-slate-700 text-[.7em]">
+          <div class="py-2 text-center"><a type="button" class="text-slate-700 dark:text-slate-300" href="https://hinddy.com/" aria-label="Brand" draggable="false"><i data-lucide="heart-handshake" class="w-3 h-3 mb-1 mr-1 inline"></i>HinddY</a></div>
+        </div>
+      </div>
     </div>
     <div id="preview" class="flex-grow overflow-y-auto p-4 bg-white dark:bg-slate-900"></div>
   </div>
+  
+  <div id="sceletonModal" class="modal fixed inset-0 right-0 bg-black bg-opacity-75 flex-shrink-0 transition-all duration-300 ease-in-out hidden z-50"></div>
 
   <div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-20">
     <div class="bg-white dark:bg-slate-900 p-6 rounded-lg w-full max-w-lg">
@@ -107,13 +126,23 @@
         Tailwind Configuration
       </h2>
       <textarea id="config-textarea" rows="10"
-        class="w-full p-2 border rounded-md mb-4 bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+        class="w-full p-2 mb-4 rounded-[8px] text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-500"
         placeholder="Enter your Tailwind configuration here..."></textarea>
       <div class="flex justify-end">
-        <button id="save-config" class="px-3 py-1 bg-sky-500 text-white text-sm rounded-md">
+        <button id="save-config" class="px-3 py-1 bg-sky-500 text-white text-[.85em] rounded-md">
           Save Configuration
         </button>
       </div>
+    </div>
+  </div>
+
+  <div id="fullscreenEditorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-75">
+    <div class="relative bg-white dark:bg-slate-900 w-full h-full overflow-y-auto">
+      <button id="closeFullscreenEditorButton" class="fixed top-0 left-0 p-1 bg-slate-900 text-slate-100 z-50"
+        title="Close Fullscreen">
+        <i data-lucide="minimize-2" class="w-4 h-4"></i>
+      </button>
+      <iframe id="editorIframe" class="w-full h-full border-0"></iframe>
     </div>
   </div>
 
@@ -126,8 +155,12 @@
       <div id="fullscreenPreview" class="z-40"></div>
     </div>
   </div>
-
+  
   <script defer src="./js/lib/sortable.js"></script>
+  <script defer src="./js/lib/standalone.js"></script>
+  <script defer src="./js/lib/parser-html.js"></script>
+  <script defer src="./js/default.js"></script>
+  <script defer src="./js/classes.js"></script>
   <script defer src="./js/script.js"></script>
   <script>
     lucide.createIcons();

@@ -11,7 +11,7 @@
 *,
 html * {
     scrollbar-width: thin;
-    scrollbar-color: #18b5d0 #bacbce;
+    scrollbar-color: #0ea5e8 #bacbce;
 }
 
 *::-webkit-scrollbar,
@@ -27,7 +27,16 @@ html *::-webkit-scrollbar-track {
 
 *::-webkit-scrollbar-thumb,
 html *::-webkit-scrollbar-thumb {
-    background-color: #18b5d0;
+    background-color: #0ea5e8;
     border-radius: 5px;
     border: 3px solid #bacbce;
 }
+
+@media (max-width: 768px) {
+    #sidebar {
+      margin-left: -253px;
+    }
+    #preview {
+      margin-left: 0;
+    }
+  }

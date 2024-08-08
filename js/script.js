@@ -572,6 +572,48 @@ function applyBodyClasses() {
   document.body.className = bodyClasses;
 }
 
+function safeGet(obj, path) {
+  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+}
+
+function insertFontAfterTitle() {
+  //const configString = currentState.sceleton.config; // ok
+  //const configString = defaultState.sceleton.config; // ok
+  const configString = tailwindConfigSetter.getSavedValue(); // ok
+  let config;
+  
+  try {
+    config = JSON.parse(configString);
+  } catch (error) {
+    console.error('Ошибка при обработке конфигурации:', error);
+    return;
+  }
+  /*if (config && config.theme && config.theme.fontFamily && config.theme.fontFamily.sans) {*/
+
+   const sans = safeGet(config, 'theme.fontFamily.sans');
+
+   if (sans) {
+    const fontFamily = Array.isArray(config.theme.fontFamily.sans) 
+      ? config.theme.fontFamily.sans[0] 
+      : config.theme.fontFamily.sans;
+   const systemFonts = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-sans-serif', 'ui-serif', 'ui-monospace', 'ui-rounded'];
+    if (typeof fontFamily === 'string' && !systemFonts.includes(fontFamily.toLowerCase())) {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const title = head.querySelector('title');
+      
+      if (title) {
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}:wght@400;500;600;700&display=swap`;
+
+        title.after(fontLink);
+      } else {
+        console.error('Тег <title> не найден в <head>');
+      }
+    }
+  }
+}
+
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -594,6 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Page options
+  insertFontAfterTitle();
   applyBodyClasses();
 
   // Page Builder

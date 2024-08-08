@@ -1,29 +1,29 @@
 const defaultConfig = `{
-    darkMode: 'class',
-    content: [],
-    theme: {
-      extend: {
-        colors: {
-          hinddy: {
-            50: '#f0f9ff',
-            100: '#e0f2fe',
-            200: '#bae6fd',
-            300: '#7dd3fc',
-            400: '#38bdf8',
-            500: '#0ea5e9',
-            600: '#0284c7',
-            700: '#0369a1',
-            800: '#075985',
-            900: '#0c4a6e',
-            950: '#0d111a',
-          },
+    "darkMode": "class",
+    "content": [],
+    "theme": {
+        "extend": {
+            "colors": {
+                "sky": {
+                    "50": "#f0f9ff",
+                    "100": "#e0f2fe",
+                    "200": "#bae6fd",
+                    "300": "#7dd3fc",
+                    "400": "#38bdf8",
+                    "500": "#0ea5e9",
+                    "600": "#0284c7",
+                    "700": "#0369a1",
+                    "800": "#075985",
+                    "900": "#0c4a6e",
+                    "950": "#0d111a"
+                }
+            }
+        },
+        "fontFamily": {
+            "sans": ["Lato", "sans-serif"]
         }
-      },
-      fontFamily: {
-        sans: ['Lato', 'sans-serif'],
-      }
     }
-  }`;
+}`;
 
 const headSnippetDefault = `<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NyA0MCIgZmlsbD0iIzBlYTVlOSI+DQogICAgPHBhdGggZD0iTTIzLjUgNi41QzE3LjUgNi41IDEzLjc1IDkuNSAxMi4yNSAxNS41QzE0LjUgMTIuNSAxNy4xMjUgMTEuMzc1IDIwLjEyNSAxMi4xMjVDMjEuODM2NyAxMi41NTI5IDIzLjA2MDEgMTMuNzk0NyAyNC40MTQyIDE1LjE2OTJDMjYuNjIwMiAxNy40MDg0IDI5LjE3MzQgMjAgMzQuNzUgMjBDNDAuNzUgMjAgNDQuNSAxNyA0NiAxMUM0My43NSAxNCA0MS4xMjUgMTUuMTI1IDM4LjEyNSAxNC4zNzVDMzYuNDEzMyAxMy45NDcxIDM1LjE4OTkgMTIuNzA1MyAzMy44MzU3IDExLjMzMDhDMzEuNjI5NyA5LjA5MTU4IDI5LjA3NjYgNi41IDIzLjUgNi41Wk0xMi4yNSAyMEM2LjI1IDIwIDIuNSAyMyAxIDI5QzMuMjUgMjYgNS44NzUgMjQuODc1IDguODc1IDI1LjYyNUMxMC41ODY3IDI2LjA1MjkgMTEuODEwMSAyNy4yOTQ3IDEzLjE2NDIgMjguNjY5M0MxNS4zNzAyIDMwLjkwODQgMTcuOTIzNCAzMy41IDIzLjUgMzMuNUMyOS41IDMzLjUgMzMuMjUgMzAuNSAzNC43NSAyNC41QzMyLjUgMjcuNSAyOS44NzUgMjguNjI1IDI2Ljg3NSAyNy44NzVDMjUuMTYzMyAyNy40NDcxIDIzLjkzOTkgMjYuMjA1MyAyMi41ODU4IDI0LjgzMDdDMjAuMzc5OCAyMi41OTE2IDE3LjgyNjYgMjAgMTIuMjUgMjBaIj48L3BhdGg+DQo8L3N2Zz4=">`;
@@ -44,7 +44,7 @@ const defaultBlocks = {
         <div class="flex lg:flex-1">
           <a href="#" class="-m-1.5 p-1.5">
             <span class="sr-only">Hinddy</span>
-            <span class="text-hinddy-500">
+            <span class="text-sky-500">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47 40" fill="currentColor"
                 stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
                 class="h-8 w-8">
@@ -79,7 +79,7 @@ const defaultBlocks = {
 
   <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
     <div
-      class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-hinddy-200 to-hinddy-400 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+      class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-sky-200 to-sky-400 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
       style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
     </div>
   </div>
@@ -88,7 +88,7 @@ const defaultBlocks = {
       <div
         class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-300 dark:ring-gray-700 dark:hover:ring-gray-600">
         Announcing our next round of funding. <a href="#"
-          class="font-semibold text-hinddy-600 dark:text-hinddy-400"><span class="absolute inset-0"
+          class="font-semibold text-sky-600 dark:text-sky-400"><span class="absolute inset-0"
             aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
@@ -98,7 +98,7 @@ const defaultBlocks = {
         TailwindCSS Builder. Drag, drop, and customize components to bring your vision to life.</p>
       <div class="mt-10 flex items-center justify-center gap-x-6">
         <a href="#"
-          class="rounded-md bg-hinddy-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-hinddy-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hinddy-600">Get
+          class="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600">Get
           started</a>
         <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">Learn more <span
             aria-hidden="true">→</span></a>
@@ -109,14 +109,14 @@ const defaultBlocks = {
     class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
     aria-hidden="true">
     <div
-      class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-hinddy-300 to-hinddy-500 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+      class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-sky-300 to-sky-500 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
       style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
     </div>
   </div>
   <div id="offCanvasMenu" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     <div
-      class="absolute top-0 left-0 w-64 h-full bg-hinddy-50 dark:bg-hinddy-950 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out">
+      class="absolute top-0 left-0 w-64 h-full bg-sky-50 dark:bg-sky-950 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out">
       <div class="text-base p-6">
         <button id="closeMenu"
           class="absolute top-4 right-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
@@ -147,7 +147,7 @@ const defaultBlocks = {
 <div class="py-24 sm:py-32">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto max-w-2xl lg:text-center">
-      <h2 class="text-base font-semibold leading-7 text-hinddy-600 dark:text-hinddy-400">Build faster</h2>
+      <h2 class="text-base font-semibold leading-7 text-sky-600 dark:text-sky-400">Build faster</h2>
       <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">Everything you need
         to create your website</p>
       <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">Hinddy provides a comprehensive set of tools
@@ -157,7 +157,7 @@ const defaultBlocks = {
       <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
         <div class="relative pl-16">
           <dt class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
-            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-hinddy-600">
+            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-600">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -171,7 +171,7 @@ const defaultBlocks = {
         </div>
         <div class="relative pl-16">
           <dt class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
-            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-hinddy-600">
+            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-600">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -185,7 +185,7 @@ const defaultBlocks = {
         </div>
         <div class="relative pl-16">
           <dt class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
-            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-hinddy-600">
+            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-600">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -199,7 +199,7 @@ const defaultBlocks = {
         </div>
         <div class="relative pl-16">
           <dt class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
-            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-hinddy-600">
+            <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-600">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -220,16 +220,16 @@ const defaultBlocks = {
     cta: {
       title: `CTA Section`,
       content: `
-<div class="bg-hinddy-600 dark:bg-hinddy-800">
+<div class="bg-sky-600 dark:bg-sky-800">
   <div class="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
     <div class="mx-auto max-w-2xl text-center">
       <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Boost your productivity.<br>Start using
         Hinddy today.</h2>
-      <p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-hinddy-100">Empower your web development process with
+      <p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-sky-100">Empower your web development process with
         Hinddy's TailwindCSS Builder. Create stunning websites faster than ever before.</p>
       <div class="mt-10 flex items-center justify-center gap-x-6">
         <a href="#"
-          class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-hinddy-600 shadow-sm hover:bg-hinddy-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Get
+          class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-sky-600 shadow-sm hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Get
           started</a>
         <a href="#" class="text-sm font-semibold leading-6 text-white">Learn more <span
             aria-hidden="true">→</span></a>
@@ -247,7 +247,7 @@ const defaultBlocks = {
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
     <div class="xl:grid xl:grid-cols-3 xl:gap-8">
       <div class="space-y-8 xl:col-span-1">
-        <span class="text-hinddy-500">
+        <span class="text-sky-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8">
               <path d="M23.5 6.5C17.5 6.5 13.75 9.5 12.25 15.5C14.5 12.5 17.125 11.375 20.125 12.125C21.8367 12.5529 23.0601 13.7947 24.4142 15.1692C26.6202 17.4084 29.1734 20 34.75 20C40.75 20 44.5 17 46 11C43.75 14 41.125 15.125 38.125 14.375C36.4133 13.9471 35.1899 12.7053 33.8357 11.3308C31.6297 9.09158 29.0766 6.5 23.5 6.5ZM12.25 20C6.25 20 2.5 23 1 29C3.25 26 5.875 24.875 8.875 25.625C10.5867 26.0529 11.8101 27.2947 13.1642 28.6693C15.3702 30.9084 17.9234 33.5 23.5 33.5C29.5 33.5 33.25 30.5 34.75 24.5C32.5 27.5 29.875 28.625 26.875 27.875C25.1633 27.4471 23.9399 26.2053 22.5858 24.8307C20.3798 22.5916 17.8266 20 12.25 20Z"/>
           </svg>

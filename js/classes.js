@@ -232,7 +232,7 @@ class PageSceletonSetter {
 
     this.modal.innerHTML = `
       <div class="modal-content relative bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-300 p-6 rounded w-full max-w-3xl h-full overflow-y-auto">
-        <h2 class="text-2xl mb-4">Page Sceleton Settings</h2>
+        <h2 class="text-2xl mb-4">Export Page Settings</h2>
         <form id="sceletonForm">
           ${fieldsHtml}
           <div class="mb-8 flex justify-end gap-x-2">
@@ -290,6 +290,7 @@ class PageSceletonSetter {
     });
     this.updateLocalStorage(data);
     this.modal.classList.add("hidden");
+    location.reload();
   }
 
   updateLocalStorage(data) {

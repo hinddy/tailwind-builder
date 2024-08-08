@@ -20,17 +20,19 @@ const pageSceletonSetter = new PageSceletonSetter('openSceletonButton', 'sceleto
 
 // Export Sceleton
 class ExportPage extends PageSkeleton {
+
   getBodyClasses() {
     return pageSceletonSetter.getSavedValue('bodyClasses');
   }
-  
+
   getScripts() {
     return pageSceletonSetter.getSavedValue('bodyStartSnippet');
   }
-  
+
   getAfterTitle() {
     return `
       <meta name="description" content="${pageSceletonSetter.getSavedValue('description')}">
+      <link href="https://fonts.googleapis.com/css2?family=${currentFontFamily()}:wght@400;500;600;700&display=swap" rel="stylesheet">
       ${pageSceletonSetter.getSavedValue('headSnippet')}
     `;
   }
@@ -65,7 +67,7 @@ function getStateFromStorage() {
 
 function mergeWithDefaultState(currentState) {
   const sceletonData = currentState.sceleton || {};
-  
+
   const mergedState = {
     blocks: currentState.blocks && Object.keys(currentState.blocks).length > 0
       ? currentState.blocks
@@ -78,7 +80,7 @@ function mergeWithDefaultState(currentState) {
         : defaultState.sceleton.config
     }
   };
-  
+
   pageSceletonSetter.fields.forEach(field => {
     if (sceletonData[field.key]) {
       mergedState.sceleton[field.key] = sceletonData[field.key];
@@ -333,7 +335,7 @@ function addBlockToPreview(blockType) {
   const uniqueContent = ensureUniqueIds(content);
 
   fullscreenEditorButton.classList.remove('hidden');
-  
+
   const blockWrapper = document.createElement("div");
   blockWrapper.className = "block-wrapper relative border border-gray-200 dark:border-gray-800";
   blockWrapper.innerHTML = uniqueContent;
@@ -356,7 +358,7 @@ function generateUniqueId() {
 function ensureUniqueIds(content) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = content;
-  
+
   const elementsWithId = tempDiv.querySelectorAll('[id]');
   const usedIds = new Set();
 
@@ -406,7 +408,7 @@ exportHtmlBtn.addEventListener("click", async () => {
 exportHtmlBtnMobile.addEventListener("click", async () => {
   exportHtml();
 });
-function exportHtml(){
+function exportHtml() {
   const tempContainer = preview.cloneNode(true);
   tempContainer
     .querySelectorAll(".block-controls")
@@ -444,12 +446,12 @@ function exportHtml(){
     singleAttributePerLine: false,
     embeddedLanguageFormatting: "auto",
   });
-  
+
   prettyHtml = prettyHtml
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/\n\s*\n/g, '\n')
     .replace(/^\s+|\s+$/g, '');
-  
+
   // MinifY
   /*prettyHtml = prettyHtml
     .replace(/>\s+</g, '><')
@@ -546,15 +548,15 @@ clearCurrentStateButton.addEventListener('click', clearCurrentState);
 function openFullscreenEditor() {
   fullscreenEditorModal.classList.remove('hidden');
 
-    editorIframe.onload = function() {
-      const isDarkMode = localStorage.getItem("darkMode") === "true";
-      editorIframe.contentWindow.postMessage({
-        type: 'init',
-        darkMode: isDarkMode
-      }, '*');
-    };
-      
-    editorIframe.src = './editor.html';
+  editorIframe.onload = function () {
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
+    editorIframe.contentWindow.postMessage({
+      type: 'init',
+      darkMode: isDarkMode
+    }, '*');
+  };
+
+  editorIframe.src = './editor.html';
 }
 function closeFullscreenEditor() {
   location.reload();
@@ -566,50 +568,53 @@ function clearCurrentState() {
   location.reload();
 }
 
-// Insert Page code snippets
+// Insert Body Classes
 function applyBodyClasses() {
   const bodyClasses = pageSceletonSetter.getSavedValue('bodyClasses');
   document.body.className = bodyClasses;
 }
 
+// Insert Current FontFamily
+function applyCurrentFontFamily(){
+  const head = document.head || document.getElementsByTagName('head')[0];
+  const title = head.querySelector('title');
+  const fontFamily = currentFontFamily();
+
+  if (title && fontFamily) {
+    const fontLink = document.createElement('link');
+    fontLink.rel = 'stylesheet';
+    fontLink.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}:wght@400;500;600;700&display=swap`;
+
+    title.after(fontLink);
+  } else {
+    console.error('Тег <title> не найден в <head>');
+  }
+}
+
+// Get Current FontFamily
 function safeGet(obj, path) {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 }
-
-function insertFontAfterTitle() {
-  //const configString = currentState.sceleton.config; // ok
-  //const configString = defaultState.sceleton.config; // ok
-  const configString = tailwindConfigSetter.getSavedValue(); // ok
+function currentFontFamily() {
+  const configString = tailwindConfigSetter.getSavedValue();
   let config;
-  
+
   try {
     config = JSON.parse(configString);
   } catch (error) {
-    console.error('Ошибка при обработке конфигурации:', error);
+    console.error('Error config process: ', error);
     return;
   }
-  /*if (config && config.theme && config.theme.fontFamily && config.theme.fontFamily.sans) {*/
 
-   const sans = safeGet(config, 'theme.fontFamily.sans');
+  const sans = safeGet(config, 'theme.fontFamily.sans');
 
-   if (sans) {
-    const fontFamily = Array.isArray(config.theme.fontFamily.sans) 
-      ? config.theme.fontFamily.sans[0] 
+  if (sans) {
+    const fontFamily = Array.isArray(config.theme.fontFamily.sans)
+      ? config.theme.fontFamily.sans[0]
       : config.theme.fontFamily.sans;
-   const systemFonts = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-sans-serif', 'ui-serif', 'ui-monospace', 'ui-rounded'];
+    const systemFonts = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-sans-serif', 'ui-serif', 'ui-monospace', 'ui-rounded'];
     if (typeof fontFamily === 'string' && !systemFonts.includes(fontFamily.toLowerCase())) {
-      const head = document.head || document.getElementsByTagName('head')[0];
-      const title = head.querySelector('title');
-      
-      if (title) {
-        const fontLink = document.createElement('link');
-        fontLink.rel = 'stylesheet';
-        fontLink.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}:wght@400;500;600;700&display=swap`;
-
-        title.after(fontLink);
-      } else {
-        console.error('Тег <title> не найден в <head>');
-      }
+      return fontFamily;
     }
   }
 }
@@ -619,25 +624,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Dark mode initialization
   const isDarkMode = localStorage.getItem("darkMode") === "true";
-  
+
   if (isDarkMode) {
     document.documentElement.classList.add("dark");
   } else {
     document.documentElement.classList.remove("dark");
   }
-  
+
   localStorage.setItem("darkMode", isDarkMode);
 
   // Full Editor preview
-  if(areaPreview){
+  if (areaPreview) {
     fullscreenEditorButton.classList.remove('hidden');
   } else {
     fullscreenEditorButton.classList.add('hidden');
   }
 
   // Page options
-  insertFontAfterTitle();
   applyBodyClasses();
+  applyCurrentFontFamily()
 
   // Page Builder
   initializeSidebar();

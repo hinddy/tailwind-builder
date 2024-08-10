@@ -6,7 +6,7 @@ class PageSkeleton {
   generate() {
     return `
 <!DOCTYPE html>
-<html lang="en" class="${this.getDarkModeClass()}">
+<html lang="en">
   <head>
     ${this.getHead()}
   </head>
@@ -18,8 +18,15 @@ class PageSkeleton {
       `;
   }
 
-  getDarkModeClass() {
-    return this.config.darkMode ? "dark" : "";
+  getHead() {
+    return `
+${this.getBeforeHead()}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${this.config.title}</title>
+${this.getAfterTitle()}
+${this.getAfterHead()}
+      `;
   }
 
   getAfterTitle() {
@@ -33,22 +40,11 @@ class PageSkeleton {
   }
 
   getAfterHead() {
-    return ``;
-  }
-
-  getHead() {
     return `
-${this.getBeforeHead()}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${this.config.title}</title>
-${this.getAfterTitle()}
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = ${this.config.tailwindConfig};
-</script>
-${this.getAfterHead()}
-      `;
+</script>`;
   }
 
   getBodyClasses() {
@@ -208,6 +204,7 @@ class PageSceletonSetter {
         label: "Body Start Snippet",
       },
       { key: "bodyClasses", type: "text", label: "Body Classes" },
+      { key: "useDevStyles", type: "checkbox", label: "Use Development Styles" },
     ];
 
     this.initModal();
@@ -218,6 +215,16 @@ class PageSceletonSetter {
   initModal() {
     let fieldsHtml = "";
     this.fields.forEach((field) => {
+      if (field.type === "checkbox") {
+        fieldsHtml += `
+          <div class="mb-4">
+            <label class="flex items-center">
+              <input type="checkbox" id="${field.key}" name="${field.key}" class="mr-2">
+              <span>${field.label}</span>
+            </label>
+          </div>
+        `;
+      } else {
       const inputType = field.type === "textarea" ? "textarea" : "input";
       fieldsHtml += `
         <div class="mb-4">
@@ -228,6 +235,7 @@ class PageSceletonSetter {
         }></${inputType}>
         </div>
       `;
+      }
     });
 
     this.modal.innerHTML = `
@@ -274,7 +282,11 @@ class PageSceletonSetter {
     this.fields.forEach((field) => {
       const element = document.getElementById(field.key);
       if (element) {
-        element.value = currentState.sceleton?.[field.key] || "";
+        if (field.type === "checkbox") {
+          element.checked = currentState.sceleton?.[field.key] || false;
+        } else {
+          element.value = currentState.sceleton?.[field.key] || "";
+        }
       }
     });
   }
@@ -285,7 +297,11 @@ class PageSceletonSetter {
     this.fields.forEach((field) => {
       const element = document.getElementById(field.key);
       if (element) {
-        data[field.key] = element.value;
+        if (field.type === "checkbox") {
+          data[field.key] = element.checked;
+        } else {
+          data[field.key] = element.value;
+        }
       }
     });
     this.updateLocalStorage(data);

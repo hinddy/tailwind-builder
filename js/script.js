@@ -17,9 +17,49 @@ const clearCurrentStateButton = document.getElementById('clearCurrentStateButton
 const editorIframe = document.getElementById('editorIframe');
 
 const pageSceletonSetter = new PageSceletonSetter('openSceletonButton', 'sceletonModal', 'saveSceletonButton');
+const pageTitle = pageSceletonSetter.getSavedValue('title');
 
 // Export Sceleton
 class ExportPage extends PageSkeleton {
+  constructor(config) {
+    super(config);
+    this.styles = '';
+    this.useDevStyles = config.useDevStyles;
+  }
+
+  async generateStyles() {
+    if (this.useDevStyles) {
+      this.styles = '';
+    } else {
+      this.styles = await generateTailwindStylesForLayout(
+        this.config.layout, 
+        this.config.tailwindConfig, 
+        this.getBodyClasses()
+      );
+      this.styles = this.styles
+        .replace(/>\s+</g, '><')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+  }
+
+  getAfterHead() {
+    if (this.useDevStyles) {
+      return `
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+          tailwind.config = ${JSON.stringify(this.config.tailwindConfig)};
+        </script>
+      `;
+    } else {
+      return `<style>${this.styles}</style>`;
+    }
+  }
+
+  async generate() {
+    await this.generateStyles();
+    return super.generate();
+  }
 
   getBodyClasses() {
     return pageSceletonSetter.getSavedValue('bodyClasses');
@@ -408,7 +448,7 @@ exportHtmlBtn.addEventListener("click", async () => {
 exportHtmlBtnMobile.addEventListener("click", async () => {
   exportHtml();
 });
-function exportHtml() {
+async function exportHtml() {
   const tempContainer = preview.cloneNode(true);
   tempContainer
     .querySelectorAll(".block-controls")
@@ -425,13 +465,15 @@ function exportHtml() {
 
   const ExportConfig = {
     darkMode: true,
-    title: pageSceletonSetter.getSavedValue('title'),
+    title: pageTitle,
+    layout: currentState.layout,
     tailwindConfig: savedConfig,
-    content: cleanContent
+    content: cleanContent,
+    useDevStyles: pageSceletonSetter.getSavedValue('useDevStyles') === 'true'
   };
 
   const htmlContent = new ExportPage(ExportConfig);
-  const uglyHtml = htmlContent.generate().trim();
+  const uglyHtml = await htmlContent.generate();
 
   // PrettY
   let prettyHtml = prettier.format(uglyHtml, {
@@ -452,13 +494,9 @@ function exportHtml() {
     .replace(/\n\s*\n/g, '\n')
     .replace(/^\s+|\s+$/g, '');
 
-  // MinifY
-  /*prettyHtml = prettyHtml
-    .replace(/>\s+</g, '><')
-    .replace(/\s+/g, ' ')
-    .trim();*/
+  const slug = pageTitle.toLowerCase().replace(/\s+/g, '-');
 
-  downloadFile(prettyHtml, "exported.html", "text/html");
+  downloadFile(prettyHtml, slug+".html", "text/html");
 }
 function downloadFile(content, fileName, contentType) {
   const blob = new Blob([content], { type: contentType });
@@ -491,7 +529,8 @@ function importProject(file) {
 }
 function exportProject() {
   const projectData = JSON.stringify(currentState);
-  downloadFile(projectData, "project.json", "application/json");
+  const slug = pageTitle.toLowerCase().replace(/\s+/g, '-');
+  downloadFile(projectData, slug+".json", "application/json");
 }
 
 // Full Screen preview
@@ -619,6 +658,52 @@ function currentFontFamily() {
   }
 }
 
+// Generate current Layout TailwindCSS Style
+async function generateTailwindStylesForLayout(layout, tailwind, body) {
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  
+  await new Promise(resolve => {
+    iframe.onload = resolve;
+    iframe.srcdoc = `
+      <html>
+        <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+          tailwind.config = ${tailwind};
+        </script>
+        </head>
+        <body class="${body}">
+          <div id="content"></div>
+          ${pageSceletonSetter.getSavedValue('bodyStartSnippet')}
+        </body>
+      </html>
+    `;
+  });
+  
+  const iframeDocument = iframe.contentDocument;
+  const contentContainer = iframeDocument.getElementById('content');
+  
+  layout.forEach(item => {
+    const div = document.createElement('div');
+    div.innerHTML = item.content;
+    contentContainer.appendChild(div.firstElementChild);
+  });
+  
+  await new Promise(resolve => setTimeout(resolve, 200));
+  
+  const styles = Array.from(iframeDocument.styleSheets)
+    .filter(sheet => sheet.ownerNode.tagName === 'STYLE' && sheet.ownerNode.textContent.includes('tailwindcss'))
+    .flatMap(sheet => Array.from(sheet.cssRules))
+    .map(rule => rule.cssText)
+    .join('\n');
+    
+  document.body.removeChild(iframe);
+
+  return styles;
+}
+
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -642,7 +727,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Page options
   applyBodyClasses();
-  applyCurrentFontFamily()
+  applyCurrentFontFamily();
 
   // Page Builder
   initializeSidebar();

@@ -19,10 +19,14 @@
       font-size: 0.9em;
     }
 
+    div.block-wrapper.highlight-border  {
+      outline: 3px dotted #6445e2;
+      box-shadow: 0 0 5px rgba(51, 1, 231, 0.5);
+    }
+
     .highlight-border {
       outline: 3px dotted #0ea5e8;
-      /* Цвет подсветки можно изменить */
-      outline-offset: -3px;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
   </style>
 </head>
@@ -48,11 +52,97 @@
     </div>
   </div>
   </div>
-
-  <!--script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script-->
+  
   <script defer src="./js/lib/quill.js"></script>
   <script defer src="./js/default.js"></script>
+  <script defer src="./js/classes.js"></script>
   <script defer src="./js/editor.js"></script>
+  <script>
+    // Get Current FontFamily
+    function safeGet(obj, path) {
+      return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    }
+    function currentFontFamily() {
+      const currentPage = JSON.parse(localStorage.getItem("currentState"));
+      //const configString = JSON.stringify(currentState.sceleton.config);
+      let config;
+
+      const configString = safeGet(currentPage, 'sceleton.config');
+
+      try {
+        config = JSON.parse(configString);
+      } catch (error) {
+        console.error('Error config process: ', error);
+        return;
+      }
+
+      const sans = safeGet(config, 'theme.fontFamily.sans');
+
+      if (sans) {
+        const fontFamily = Array.isArray(config.theme.fontFamily.sans)
+          ? config.theme.fontFamily.sans[0]
+          : config.theme.fontFamily.sans;
+        const systemFonts = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-sans-serif', 'ui-serif', 'ui-monospace', 'ui-rounded'];
+        if (typeof fontFamily === 'string' && !systemFonts.includes(fontFamily.toLowerCase())) {
+          return fontFamily;
+        }
+      }
+    }
+    function setFontLink() {
+      const fontFamily = currentFontFamily();
+      if (fontFamily) {
+        const linkElement = document.createElement('link');
+        linkElement.href = `https://fonts.googleapis.com/css2?family=${fontFamily}:wght@400;500;600;700&display=swap`;
+        linkElement.rel = 'stylesheet';
+        
+        const titleElement = document.querySelector('title');
+        if (titleElement) {
+          titleElement.insertAdjacentElement('afterend', linkElement);
+        } else {
+          document.head.appendChild(linkElement);
+        }
+      }
+    }
+    
+    setFontLink();
+
+    function addSectionControls(section) {
+      const controlButton = document.createElement('div');
+      controlButton.style.position = 'absolute';
+      controlButton.style.top = '5px';
+      controlButton.style.right = '5px';
+      controlButton.style.width = '20px';
+      controlButton.style.height = '20px';
+      controlButton.style.backgroundColor = 'rgba(0, 123, 255, 0.8)';
+      controlButton.style.cursor = 'pointer';
+      controlButton.style.zIndex = '1000';
+      controlButton.title = 'Select Section';
+
+      controlButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Останавливаем распространение клика, чтобы избежать открытия внутреннего div
+        handleSectionClick(section); // Обрабатываем клик по секции
+      });
+
+      section.style.position = 'relative'; // Делаем секцию позиционируемой
+      section.appendChild(controlButton);
+    }
+
+    function handleSectionClick(section) {
+      // Здесь добавьте логику для открытия секции в редакторе
+      console.log('Section clicked:', section);
+    }
+
+    function initializeSectionControls() {
+      document.querySelectorAll('section').forEach(addSectionControls);
+    }
+
+    // Вызывайте функцию при загрузке контента
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeSectionControls();
+    });
+
+
+  </script>
 </body>
 
 </html>

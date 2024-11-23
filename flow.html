@@ -1,0 +1,678 @@
+<html></html>
+<head>
+  <base href="./">
+  <title>Tailwind Component Viewer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Ready layout for viewing TailwindCSS components with the ability to save them and convert them to HandlebarsJS Sintax">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.5/split.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://placehold.co/32/0284c7/white/?text=BY" />
+  <style>
+    *,
+    html * {
+      scrollbar-width: thin;
+      scrollbar-color: #495565 #bacbce;
+    }
+    *::-webkit-scrollbar,
+    html *::-webkit-scrollbar {
+      height: 12px;
+      width: 12px;
+    }
+    *::-webkit-scrollbar-track,
+    html *::-webkit-scrollbar-track {
+      background: #bacbce;
+    }
+    *::-webkit-scrollbar-thumb,
+    html *::-webkit-scrollbar-thumb {
+      background-color: #495565;
+      border-radius: 8px;
+      border: 5px solid #bacbce;
+    }
+    pre {
+      margin: 0;
+    }
+    .copy-feedback {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 5px;
+      z-index: 1000;
+    }
+    .component-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      user-select: none;
+    }
+    @media (max-width: 767px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+    }
+  </style>
+  <style type="text/tailwindcss">
+    @layer base {
+:root {
+--background: 0 0% 100%;
+--foreground: 240 10% 3.9%;
+
+--card: 0 0% 100%;
+--card-foreground: 240 10% 3.9%;
+
+--popover: 0 0% 100%;
+--popover-foreground: 240 10% 3.9%;
+
+--primary: 142.1 76.2% 36.3%;
+--primary-foreground: 355.7 100% 97.3%;
+
+--secondary: 240 4.8% 95.9%;
+--secondary-foreground: 240 5.9% 10%;
+
+--muted: 240 4.8% 95.9%;
+--muted-foreground: 240 3.8% 46.1%;
+
+--accent: 240 4.8% 95.9%;
+--accent-foreground: 240 5.9% 10%;
+
+--destructive: 0 84.2% 60.2%;
+--destructive-foreground: 0 0% 98%;
+
+--border:240 5.9% 90%;
+--input:240 5.9% 90%;
+--ring:142.1 76.2% 36.3%;
+--radius: 0.75rem;
+}
+
+.dark {
+--background:20 14.3% 4.1%;
+--foreground:0 0% 95%;
+
+--card:24 9.8% 10%;
+--card-foreground:0 0% 95%;
+
+--popover:0 0% 9%;
+--popover-foreground:0 0% 95%;
+
+--primary:142.1 70.6% 45.3%;
+--primary-foreground:144.9 80.4% 10%;
+
+--secondary:240 3.7% 15.9%;
+--secondary-foreground:0 0% 98%;
+
+--muted:0 0% 15%;
+--muted-foreground:240 5% 64.9%;
+
+--accent:12 6.5% 15.1%;
+--accent-foreground:0 0% 98%;
+
+--destructive:0 62.8% 30.6%;
+--destructive-foreground:0 85.7% 97.3%;
+
+--border:240 3.7% 15.9%;
+--input:240 3.7% 15.9%;
+--ring:142.4 71.8% 29.2%;
+}
+}
+      </style>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-200">
+  <div class="flex h-screen">
+      <div id="componentsContainer"></div>
+      <div id="copyFeedback" class="copy-feedback rounded-lg">Copied to clipboard!</div>
+        
+    <div class="fixed bottom-1 left-1 z-50"><button id="config-btn"
+    class=" pt-2 pb-[.25rem] px-2 text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600 rounded-lg mr-2"
+    title="TailwindCSS Configuration">
+    <i data-lucide="cog" class="w-4 h-4 mb-1"></i>
+  </button></div>
+      <div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 p-4 flex items-center justify-center hidden z-40">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-lg w-full max-w-lg">
+          <h2 class="text-2xl font-bold mb-4 text-slate-800 dark:text-white">
+            Tailwind Configuration
+          </h2>
+          <textarea id="config-textarea" rows="10"
+            class="w-full p-2 mb-4 rounded-[8px] text-sm bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-500"
+            placeholder="Enter your Tailwind configuration here..."></textarea>
+          <div class="flex justify-end">
+            <button id="save-config" class="px-3 py-1 bg-sky-500 text-white text-[.85em] rounded-md">
+              Save Configuration
+            </button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      try {
+        // Fetch component data from localStorage
+        const savedProject = JSON.parse(localStorage.getItem('componentYProject'));
+        
+        const componentsUrl = savedProject?.publicUrl || './components/shadcn-uikit.json';
+        
+        const response = await fetch(componentsUrl);
+        
+        if (!response.ok) {
+          throw new Error(`Ошибка загрузки JSON: ${response.statusText}`);
+        }
+
+        const components = await response.json();
+        
+        if (typeof components !== 'object') {
+          throw new Error('Неверный формат данных JSON');
+        }
+
+        // Get the container where components will be displayed
+        const componentsContainer = document.getElementById("componentsContainer");
+        
+        if (!componentsContainer) {
+          throw new Error('Контейнер componentsContainer не найден');
+        }
+
+        // Iterate over components and create their previews
+        for (const [key, component] of Object.entries(components)) {
+          componentsContainer.innerHTML += createComponentPreview(key, component);
+        }
+
+        // Initialize all components
+        for (const [key, component] of Object.entries(components)) {
+          initializeComponent(key, component);
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
+
+      // Function to get state from storage
+      function getStateFromStorage() {
+        try {
+          const storedState = localStorage.getItem("currentState");
+          return storedState ? JSON.parse(storedState) : null;
+        } catch (error) {
+          console.error("Error parsing state from localStorage:", error);
+          return null;
+        }
+      }
+
+      // Function to create new block type
+      function createNewBlockType(key, title, content) {
+        let currentState = getStateFromStorage() || { blocks: {} };
+        currentState.blocks[key] = { title, content };
+        localStorage.setItem("currentState", JSON.stringify(currentState));
+        console.log(`Block "${key}" saved to local storage`);
+        return currentState;
+      }
+
+      // Function to create component preview
+      function createComponentPreview(key, component) {
+        const componentHtml = `
+          <div id="component-${key}" class="bg-white dark:bg-slate-800 rounded p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-2">${component.title}</h2>
+            <p class="mb-8">${component.excerpt}</p>
+            <div class="flex flex-col md:flex-row flex-1 justify-between items-center mb-4 space-y-4 md:space-y-0 md:space-x-4">
+              <div class="flex" role="group">
+                <button id="previewBtn-${key}" type="button" class="px-4 py-2 text-xs font-bold text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600 rounded-l-lg">
+                  Preview
+                </button>
+                <button id="htmlBtn-${key}" type="button" class="px-4 py-2 text-xs font-bold text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600">
+                  HTML
+                </button>
+                <button id="hbsBtn-${key}" type="button" class="px-4 py-2 text-xs font-bold text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600">
+                  HBS
+                </button>
+                <button id="contextBtn-${key}" type="button" class="px-4 py-2 text-xs font-bold text-slate-900 bg-white border border-slate-200 rounded-r-lg hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600">
+                  Context
+                </button>
+              </div>
+              <div class="flex" role="group">
+                <button id="darkModeBtn-${key}" class="p-2 text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600 rounded-l-lg dark:opacity-50 dark:pointer-events-none" title="Toggle Dark Mode">
+                  <i data-lucide="moon" class="w-4 h-4"></i>
+                </button>
+                <button id="openFullPreview-${key}" class="p-2 text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600" title="Open Full Preview">
+                  <i data-lucide="maximize" class="w-4 h-4"></i>
+                </button>
+                <button id="copyBtn-${key}" class="p-2 text-slate-900 bg-white border-t border-b border-slate-200 hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600" title="Copy Snippet">
+                  <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+                <button id="saveBtn-${key}" class="p-2 text-slate-900 bg-white border border-slate-200 rounded-r-lg hover:bg-slate-100 hover:text-sky-700 focus:z-10 focus:ring-0 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:hover:text-white dark:hover:bg-slate-600" title="Save to Local Storage">
+                  <i data-lucide="save-all" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div id="componentContainer-${key}">
+              <div id="previewContent-${key}" class="transition-all duration-300 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border dark:border-slate-600 overflow-hidden">
+                <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0">
+              </div>
+              <pre id="htmlContent-${key}" class="hidden"><code class="hljs !pb-4 text-[13px] bg-slate-900"></code></pre>
+              <pre id="hbsContent-${key}" class="hidden"><code class="hljs !pb-4 text-[13px] bg-slate-900"></code></pre>
+              <pre id="contextContent-${key}" class="hidden"><code class="hljs !pb-4 text-[13px] bg-slate-900 language-json"></code></pre>
+            </div>
+          </div>
+          <div id="fullscreenModal-${key}" class="fixed inset-0 z-[55] hidden flex items-center justify-center bg-black bg-opacity-75">
+            <div class="relative bg-white dark:bg-slate-900 w-full h-full overflow-y-auto">
+              <button id="closeFullscreenButton-${key}" class="fixed top-0 left-0 p-1 bg-slate-900 text-slate-100 z-[55]"
+                title="Close Fullscreen">
+                <i data-lucide="minimize-2" class="w-4 h-4"></i>
+              </button>
+              <div id="fullscreenPreview-${key}" class="z-20 flex justify-center items-center min-h-screen m-0"></div>
+            </div>
+          </div>
+        `;
+        return componentHtml;
+      }
+
+      function setupFullscreenModal(key) {
+        const fullscreenButton = document.getElementById(`openFullPreview-${key}`);
+        const closeFullscreenButton = document.getElementById(`closeFullscreenButton-${key}`);
+        const fullscreenModal = document.getElementById(`fullscreenModal-${key}`);
+        const preview = document.getElementById(`previewContent-${key}`);
+        const fullscreenPreview = document.getElementById(`fullscreenPreview-${key}`);
+
+        fullscreenButton.addEventListener("click", function () {
+          fullscreenPreview.innerHTML = preview.innerHTML;
+          fullscreenModal.classList.remove("hidden");
+        });
+
+        closeFullscreenButton.addEventListener("click", function () {
+          fullscreenModal.classList.add("hidden");
+        });
+      }
+
+      // Function to parse HTML and generate HBS and Context
+      function parseHTML(html) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const context = {};
+        let hbsTemplate = html;
+
+        const titleTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
+        let postTitleSet = false;
+
+        titleTags.forEach((tag, index) => {
+          doc.querySelectorAll(tag).forEach((element, i) => {
+            const key = tag === "h1" && !postTitleSet ? "post_title" : `block_title_${tag}_${i + 1}`;
+            context[key] = element.textContent.trim();
+            hbsTemplate = hbsTemplate.replace(element.outerHTML, `<${tag}>{{${key}}}<\/${tag}>`);
+            if (key === "post_title") postTitleSet = true;
+          });
+        });
+
+        doc.querySelectorAll("p").forEach((element, i) => {
+          const key = `paragraph_${i + 1}`;
+          context[key] = element.textContent.trim();
+          hbsTemplate = hbsTemplate.replace(element.outerHTML, `<p>{{${key}}}<\/p>`);
+        });
+
+        doc.querySelectorAll("span").forEach((element, i) => {
+          const key = `span_${i + 1}`;
+          context[key] = element.textContent.trim();
+          hbsTemplate = hbsTemplate.replace(element.outerHTML, `<span>{{${key}}}<\/span>`);
+        });
+
+        doc.querySelectorAll("a").forEach((element, i) => {
+          const href = element.getAttribute("href");
+          const text = element.textContent.trim();
+          if (href) {
+            const linkKey = `link_${i + 1}`;
+            context[linkKey] = { href, text };
+            hbsTemplate = hbsTemplate.replace(element.outerHTML, `<a href="{{${linkKey}.href}}">{{${linkKey}.text}}<\/a>`);
+          }
+        });
+
+        return { hbsTemplate, context };
+      }
+
+      // Function to initialize component
+      function initializeComponent(key, component) {
+        const previewContent = document.getElementById(`previewContent-${key}`);
+        const htmlContent = document.getElementById(`htmlContent-${key}`);
+        const hbsContent = document.getElementById(`hbsContent-${key}`);
+        const contextContent = document.getElementById(`contextContent-${key}`);
+
+        previewContent.innerHTML = component.content;
+        htmlContent.querySelector("code").textContent = component.content.trim();
+
+        const { hbsTemplate, context } = parseHTML(component.content);
+        hbsContent.querySelector("code").textContent = hbsTemplate.trim();
+        contextContent.querySelector("code").textContent = JSON.stringify(context, null, 2);
+
+        setupFullscreenModal(key);
+
+        hljs.configure({ ignoreUnescapedHTML: true });
+
+        hljs.highlightElement(htmlContent.querySelector("code"));
+        hljs.highlightElement(hbsContent.querySelector("code"));
+        hljs.highlightElement(contextContent.querySelector("code"));
+
+        // Toggle views
+        const toggleView = (viewType) => {
+          [previewContent, htmlContent, hbsContent, contextContent].forEach((el) => el.classList.add("hidden"));
+          document.getElementById(`${viewType}Content-${key}`).classList.remove("hidden");
+
+          // Update button styles
+          [`previewBtn-${key}`, `htmlBtn-${key}`, `hbsBtn-${key}`, `contextBtn-${key}`].forEach((btnId) => {
+            const btn = document.getElementById(btnId);
+            btn.classList.remove("bg-sky-600", "text-white");
+            btn.classList.add("bg-white", "text-slate-900", "dark:bg-slate-700", "dark:text-white");
+          });
+
+          const activeBtn = document.getElementById(`${viewType}Btn-${key}`);
+          activeBtn.classList.remove("bg-white", "text-slate-900", "dark:bg-slate-700", "dark:text-white");
+          activeBtn.classList.add("bg-sky-600", "text-white");
+
+          if (viewType !== "preview") {
+            hljs.highlightElement(document.getElementById(`${viewType}Content-${key}`).querySelector("code"));
+          }
+        };
+
+        document.getElementById(`previewBtn-${key}`).addEventListener("click", () => toggleView("preview"));
+        document.getElementById(`htmlBtn-${key}`).addEventListener("click", () => toggleView("html"));
+        document.getElementById(`hbsBtn-${key}`).addEventListener("click", () => toggleView("hbs"));
+        document.getElementById(`contextBtn-${key}`).addEventListener("click", () => toggleView("context"));
+
+        // Toggle dark mode for preview area only
+        document.getElementById(`darkModeBtn-${key}`).addEventListener("click", () => {
+          document.getElementById(`componentContainer-${key}`).classList.toggle("dark");
+        });
+
+        // Copy snippet
+        document.getElementById(`copyBtn-${key}`).addEventListener("click", () => {
+          navigator.clipboard.writeText(component.content.trim()).then(() => {
+            document.getElementById("copyFeedback").style.display = "block";
+            setTimeout(() => {
+              document.getElementById("copyFeedback").style.display = "none";
+            }, 2000);
+          });
+        });
+
+        // Save to local storage
+        document.getElementById(`saveBtn-${key}`).addEventListener("click", () => {
+          const currentState = createNewBlockType(key, component.title, component.content);
+          document.getElementById("copyFeedback").textContent = "Saved to local storage!";
+          document.getElementById("copyFeedback").style.display = "block";
+          setTimeout(() => {
+            document.getElementById("copyFeedback").style.display = "none";
+            document.getElementById("copyFeedback").textContent = "Copied to clipboard!";
+          }, 2000);
+
+          // Disable the component
+          disableComponent(key);
+        });
+
+        // Check if the component is already saved in local storage
+        const savedState = getStateFromStorage();
+        if (savedState && savedState.blocks && savedState.blocks[key]) {
+          disableComponent(key);
+        }
+
+        // Initial view
+        toggleView("preview");
+
+        // Re-initialize Lucide icons
+        lucide.createIcons();
+      }
+
+      // Function to disable component
+      function disableComponent(key) {
+        const componentElement = document.getElementById(`component-${key}`);
+        componentElement.classList.add("component-disabled");
+
+        // Update the button to show it's been added
+        const saveBtn = document.getElementById(`saveBtn-${key}`);
+        saveBtn.innerHTML = '<i data-lucide="check" class="text-green-500 w-4 h-4" stroke-width="4"><\/i>';
+        saveBtn.disabled = true;
+
+        // Re-initialize Lucide icons for the updated button
+        lucide.createIcons();
+      }
+
+window.addEventListener("message", function(e) {
+  if (e.data.type === 'init' || e.data.type === 'toggleDarkMode') {
+    applyDarkMode(e.data.darkMode);
+  }
+});
+
+function applyDarkMode(isDarkMode) {
+  if (isDarkMode) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+  
+  localStorage.setItem("darkMode", isDarkMode);
+  
+  updateStateInStorage(isDarkMode);
+}
+
+function getStateFromStorage() {
+  try {
+    const storedState = localStorage.getItem("currentState");
+    return storedState ? JSON.parse(storedState) : null;
+  } catch (error) {
+    console.error("Error parsing state from localStorage:", error);
+    return null;
+  }
+}
+
+function updateStateInStorage(isDarkMode) {
+  const currentState = getStateFromStorage();
+  if (currentState) {
+    currentState.darkMode = isDarkMode;
+    localStorage.setItem("currentState", JSON.stringify(currentState));
+  }
+}
+
+const initialDarkMode = localStorage.getItem("darkMode") === "true";
+applyDarkMode(initialDarkMode);
+      // Config Modal
+      const defaultConfig = `{
+    "darkMode": "class",
+    "content": [],
+    "theme": {
+        "container": {
+            "center": true,
+            "padding": "2rem",
+            "screens": {
+                "2xl": "1400px"
+            }
+        },
+        "extend": {
+            "colors": {
+                "border": "hsl(var(--border))",
+                "input": "hsl(var(--input))",
+                "ring": "hsl(var(--ring))",
+                "background": "hsl(var(--background))",
+                "foreground": "hsl(var(--foreground))",
+                "primary": {
+                    "DEFAULT": "hsl(var(--primary))",
+                    "foreground": "hsl(var(--primary-foreground))"
+                },
+                "secondary": {
+                    "DEFAULT": "hsl(var(--secondary))",
+                    "foreground": "hsl(var(--secondary-foreground))"
+                },
+                "destructive": {
+                    "DEFAULT": "hsl(var(--destructive))",
+                    "foreground": "hsl(var(--destructive-foreground))"
+                },
+                "muted": {
+                    "DEFAULT": "hsl(var(--muted))",
+                    "foreground": "hsl(var(--muted-foreground))"
+                },
+                "accent": {
+                    "DEFAULT": "hsl(var(--accent))",
+                    "foreground": "hsl(var(--accent-foreground))"
+                },
+                "popover": {
+                    "DEFAULT": "hsl(var(--popover))",
+                    "foreground": "hsl(var(--popover-foreground))"
+                },
+                "card": {
+                    "DEFAULT": "hsl(var(--card))",
+                    "foreground": "hsl(var(--card-foreground))"
+                }
+            },
+            "borderRadius": {
+                "xl": "calc(var(--radius) + 4px)",
+                "lg": "var(--radius)",
+                "md": "calc(var(--radius) - 2px)",
+                "sm": "calc(var(--radius) - 4px)"
+            },
+            "keyframes": {
+                "accordion-down": {
+                    "from": {
+                        "height": 0
+                    },
+                    "to": {
+                        "height": "var(--radix-accordion-content-height)"
+                    }
+                },
+                "accordion-up": {
+                    "from": {
+                        "height": "var(--radix-accordion-content-height)"
+                    },
+                    "to": {
+                        "height": 0
+                    }
+                },
+                "collapsible-down": {
+                    "from": {
+                        "height": 0
+                    },
+                    "to": {
+                        "height": "var(--radix-collapsible-content-height)"
+                    }
+                },
+                "collapsible-up": {
+                    "from": {
+                        "height": "var(--radix-collapsible-content-height)"
+                    },
+                    "to": {
+                        "height": 0
+                    }
+                }
+            },
+            "animation": {
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+                "collapsible-down": "collapsible-down 0.2s ease-in-out",
+                "collapsible-up": "collapsible-up 0.2s ease-in-out"
+            }
+        }
+    }
+}`;
+
+      const configBtn = document.getElementById("config-btn");
+      const configModal = document.getElementById("config-modal");
+      const configTextarea = document.getElementById("config-textarea");
+      const saveConfigBtn = document.getElementById("save-config");
+
+      const tailwindConfigSetter = new UniversalDataSetter('config-btn', 'config-modal', 'config-textarea', 'save-config', 'config');
+      tailwindConfigSetter.setDefaultValue(defaultConfig);
+
+      function applyTailwindConfig() {
+        const config = tailwindConfigSetter.getSavedValue();
+        let scriptElement = document.getElementById('tailwind-config');
+        if (!scriptElement) {
+          scriptElement = document.createElement('script');
+          scriptElement.id = 'tailwind-config';
+          document.head.appendChild(scriptElement);
+        }
+        scriptElement.textContent = `tailwind.config = ${config};`;
+      }
+
+      tailwindConfigSetter.saveButton.addEventListener('click', () => {
+        tailwindConfigSetter.saveData();
+        applyTailwindConfig();
+        location.reload();
+      });
+
+      applyTailwindConfig();
+
+      // Initialize Lucide icons
+      lucide.createIcons();
+    });
+  </script>
+  <script>
+    class UniversalDataSetter {
+      constructor(buttonId, modalId, textareaId, saveButtonId, key) {
+        this.button = document.getElementById(buttonId);
+        this.modal = document.getElementById(modalId);
+        this.textarea = document.getElementById(textareaId);
+        this.saveButton = document.getElementById(saveButtonId);
+        this.key = key;
+    
+        this.initEventListeners();
+        this.loadSavedState();
+      }
+    
+      initEventListeners() {
+        this.button.addEventListener("click", () => this.openModal());
+        this.modal.addEventListener("click", (e) => this.handleModalClick(e));
+        this.saveButton.addEventListener("click", () => this.saveData());
+      }
+    
+      openModal() {
+        this.modal.classList.remove("hidden");
+      }
+    
+      handleModalClick(e) {
+        if (e.target === this.modal) {
+          this.modal.classList.add("hidden");
+        }
+      }
+    
+      loadSavedState() {
+        const currentState = JSON.parse(localStorage.getItem("currentState")) || {};
+        this.textarea.value = currentState.sceleton?.[this.key] || "";
+      }
+    
+      saveData() {
+        const data = this.textarea.value;
+        this.updateLocalStorage(data);
+        this.modal.classList.add("hidden");
+        return data;
+      }
+    
+      updateLocalStorage(data) {
+        let currentState = JSON.parse(localStorage.getItem("currentState")) || {};
+        if (!currentState.sceleton) currentState.sceleton = {};
+        currentState.sceleton[this.key] = data;
+        localStorage.setItem("currentState", JSON.stringify(currentState));
+      }
+    
+      getSavedValue() {
+        const currentState = JSON.parse(localStorage.getItem("currentState")) || {};
+        return currentState.sceleton?.[this.key] || "";
+      }
+    
+      setDefaultValue(defaultValue) {
+        let currentState = JSON.parse(localStorage.getItem("currentState")) || {};
+        if (!currentState.sceleton) currentState.sceleton = {};
+        if (!currentState.sceleton[this.key]) {
+          currentState.sceleton[this.key] = defaultValue;
+          localStorage.setItem("currentState", JSON.stringify(currentState));
+        }
+        this.loadSavedState();
+      }
+    }
+  </script>
+</body>
+</html>

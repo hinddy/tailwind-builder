@@ -109,3 +109,25 @@ Join us in revolutionising web development. Your next big idea is just a drag an
 [Try It Now](https://www.hinddy.com/build/) | [Learn More](https://www.hinddy.com/)
 
 #BuildY #IndieHacking #WebDevelopment #TailwindCSS
+
+## Current Shadcn Vue Configuration
+
+We have temporarily hardcoded styles and configuration to work with Shadcn Vue UI Kit components ([@vue-shadcn-starter](https://github.com/alexy-os/vue-shadcn-starter)).
+
+### Component Location
+- UI Kit components are located in: `components/shadcn-uikit.json`
+- Component path is defined in `flow.html`:
+
+```js
+const componentsUrl = savedProject?.publicUrl || './components/shadcn-uikit.json';
+```
+
+### Adding Components to Builder
+
+1. Open `/flow.html` page
+2. Browse available components
+3. Click "Save to Local Storage" button for desired components
+4. Components will be saved to browser's local storage
+5. Saved components will become available in the builder
+
+> **Note**: This is a temporary solution for quick start with Shadcn Vue components. Future versions will implement a more flexible system supporting various UI libraries.

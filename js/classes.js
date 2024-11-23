@@ -40,11 +40,18 @@ ${this.getAfterHead()}
   }
 
   getAfterHead() {
-    return `
+    if (this.config.useDevStyles) {
+      return `
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = ${this.config.tailwindConfig};
 </script>`;
+    } else {
+      return `
+<style>
+  ${this.config.styles || ''}
+</style>`;
+    }
   }
 
   getBodyClasses() {

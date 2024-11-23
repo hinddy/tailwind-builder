@@ -106,7 +106,7 @@ Join us in revolutionising web development. Your next big idea is just a drag an
 
 "From concept to launch, faster than ever. TailwindCSS Layout Builder: Where indie dreams become digital realities."
 
-[Try It Now](https://www.hinddy.com/build/) | [Learn More](https://www.hinddy.com/)
+[Try It Now](https://buildy-five.vercel.app/) | [Learn More](https://www.hinddy.com/)
 
 #BuildY #IndieHacking #WebDevelopment #TailwindCSS
 
@@ -117,6 +117,12 @@ We have temporarily hardcoded styles and configuration to work with Shadcn Vue U
 ### Component Location
 - UI Kit components are located in: `components/shadcn-uikit.json`
 - Component path is defined in `flow.html`:
+
+## Let's go!
+
+- Step 1: Go to [FlowKit](https://buildy-five.vercel.app/flow.html) and save components you like to local storage;
+- Step 2: Go to [Builder](https://buildy-five.vercel.app/) and use saved components to build your UI;
+- Step 3: Export your project as HTML file and use it as you want.
 
 ```js
 const componentsUrl = savedProject?.publicUrl || './components/shadcn-uikit.json';
